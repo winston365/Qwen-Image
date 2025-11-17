@@ -170,11 +170,22 @@ def polish_prompt_zh(original_prompt):
 
 
 def rewrite(input_prompt):
+    # Check if API key is available
+    api_key = os.environ.get('DASHSCOPE_API_KEY')
+    if not api_key:
+        print("[Info] DASHSCOPE_API_KEY not set, using original prompt without enhancement")
+        # Add basic magic prompt suffix
+        lang = get_caption_language(input_prompt)
+        if lang == 'zh':
+            return input_prompt + ", 超清，4K，电影级构图."
+        else:
+            return input_prompt + ", Ultra HD, 4K, cinematic composition."
+
+    # If API key is available, use prompt enhancement
     lang = get_caption_language(input_prompt)
     if lang == 'zh':
         return polish_prompt_zh(input_prompt)
     elif lang == 'en':
-
         return polish_prompt_en(input_prompt)
 
 
